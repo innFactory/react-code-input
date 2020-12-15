@@ -4,10 +4,10 @@
  * https://github.com/40818419/react-code-input
  */
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { uuidv4 } from './utils';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { uuidv4 } from "./utils";
 
 const BACKSPACE_KEY = 8;
 const LEFT_ARROW_KEY = 37;
@@ -20,7 +20,14 @@ class ReactCodeInput extends Component {
   constructor(props) {
     super(props);
 
-    const { fields, type, isValid, disabled, filterKeyCodes, forceUppercase } = props;
+    const {
+      fields,
+      type,
+      isValid,
+      disabled,
+      filterKeyCodes,
+      forceUppercase,
+    } = props;
     let { value } = props;
 
     if (forceUppercase) {
@@ -36,24 +43,24 @@ class ReactCodeInput extends Component {
       disabled,
       filterKeyCodes,
       defaultInputStyle: {
-        fontFamily: 'monospace',
-        MozAppearance: 'textfield',
-        borderRadius: '6px',
-        border: '1px solid',
-        boxShadow: '0px 0px 10px 0px rgba(0,0,0,.10)',
-        margin: '4px',
-        paddingLeft: '8px',
+        fontFamily: "monospace",
+        MozAppearance: "textfield",
+        borderRadius: "6px",
+        border: "1px solid",
+        boxShadow: "0px 0px 10px 0px rgba(0,0,0,.10)",
+        margin: "4px",
+        paddingLeft: "8px",
         paddingRight: 0,
-        width: '36px',
-        height: '42px',
-        fontSize: '32px',
-        boxSizing: 'border-box',
+        width: "36px",
+        height: "42px",
+        fontSize: "32px",
+        boxSizing: "border-box",
       },
     };
 
     for (let i = 0; i < Number(this.state.fields); i += 1) {
       if (i < 32) {
-        const value = this.state.value[i] || '';
+        const value = this.state.value[i] || "";
         this.state.input.push(value);
       }
     }
@@ -78,8 +85,8 @@ class ReactCodeInput extends Component {
   handleTouch(value) {
     const { touch, untouch, name } = this.props;
 
-    if (typeof touch === 'function' && typeof untouch === 'function') {
-      if (value === '') {
+    if (typeof touch === "function" && typeof untouch === "function") {
+      if (value === "") {
         touch(name);
       } else {
         untouch(name);
@@ -96,25 +103,28 @@ class ReactCodeInput extends Component {
       value = value.toUpperCase();
     }
 
-    if (this.state.type === 'number') {
-      value = value.replace(/[^\d]/g, '');
+    if (this.state.type === "number") {
+      value = value.replace(/[^\d]/g, "");
     }
 
     /** Filter Chars */
-    value = value.split('').filter(currChar => {
-      if (filterCharsIsWhitelist) {
-        return filterChars.includes(currChar);
-      }
-      return !filterChars.includes(currChar);
-    }).join('');
+    value = value
+      .split("")
+      .filter((currChar) => {
+        if (filterCharsIsWhitelist) {
+          return filterChars.includes(currChar);
+        }
+        return !filterChars.includes(currChar);
+      })
+      .join("");
 
     let fullValue = value;
 
-    if (value !== '') {
+    if (value !== "") {
       const input = this.state.input.slice();
 
       if (value.length > 1) {
-        value.split('').map((chart, i) => {
+        value.split("").map((chart, i) => {
           if (Number(e.target.dataset.id) + i < this.props.fields) {
             input[Number(e.target.dataset.id) + i] = chart;
           }
@@ -131,18 +141,20 @@ class ReactCodeInput extends Component {
         return false;
       });
 
-      const newTarget = this.textInput[e.target.dataset.id < input.length
-        ? Number(e.target.dataset.id) + 1
-        : e.target.dataset.id];
+      const newTarget = this.textInput[
+        e.target.dataset.id < input.length
+          ? Number(e.target.dataset.id) + 1
+          : e.target.dataset.id
+      ];
 
       if (newTarget) {
         newTarget.focus();
         newTarget.select();
       }
 
-      fullValue = input.join('');
+      fullValue = input.join("");
 
-      this.setState({ value: input.join(''), input });
+      this.setState({ value: input.join(""), input });
     }
 
     if (this.props.onChange && fullValue) {
@@ -157,8 +169,7 @@ class ReactCodeInput extends Component {
       nextTarget = this.textInput[target + 1],
       prevTarget = this.textInput[target - 1];
 
-    let input,
-      value;
+    let input, value;
 
     if (this.state.filterKeyCodes.length > 0) {
       this.state.filterKeyCodes.map((item) => {
@@ -172,13 +183,13 @@ class ReactCodeInput extends Component {
     switch (e.keyCode) {
       case BACKSPACE_KEY:
         e.preventDefault();
-        this.textInput[target].value = '';
+        this.textInput[target].value = "";
         input = this.state.input.slice();
-        input[target] = '';
-        value = input.join('');
+        input[target] = "";
+        value = input.join("");
 
         this.setState({ value, input });
-        if (this.textInput[target].value === '') {
+        if (this.textInput[target].value === "") {
           if (prevTarget) {
             prevTarget.focus();
             prevTarget.select();
@@ -214,7 +225,7 @@ class ReactCodeInput extends Component {
         break;
 
       case E_KEY: // This case needs to be handled because of https://stackoverflow.com/questions/31706611/why-does-the-html-input-with-type-number-allow-the-letter-e-to-be-entered-in
-        if (e.target.type === 'number') {
+        if (e.target.type === "number") {
           e.preventDefault();
           break;
         }
@@ -237,92 +248,119 @@ class ReactCodeInput extends Component {
         autoFocus,
         autoComplete,
         pattern,
-        inputMode
+        inputMode,
       } = this.props,
       { disabled, input, isValid, defaultInputStyle } = this.state,
       styles = {
-        container: { display: 'inline-block', ...style },
+        container: { display: "flex", alignItems: "center", ...style },
         input: isValid ? inputStyle : inputStyleInvalid,
+        separator: {
+          width: 10,
+          height: 3,
+          backgroundColor: "black",
+          marginLeft: 6,
+          marginRight: 6,
+        },
       };
 
     if (!className && Object.keys(inputStyle).length === 0) {
       Object.assign(inputStyle, {
         ...defaultInputStyle,
-        color: 'black',
-        backgroundColor: 'white',
-        borderColor: 'lightgrey',
+        color: "black",
+        backgroundColor: "white",
+        borderColor: "lightgrey",
       });
     }
 
     if (!className && Object.keys(inputStyleInvalid).length === 0) {
       Object.assign(inputStyleInvalid, {
         ...defaultInputStyle,
-        color: '#b94a48',
-        backgroundColor: '#f2dede',
-        borderColor: '#eed3d7',
+        color: "#b94a48",
+        backgroundColor: "#f2dede",
+        borderColor: "#eed3d7",
       });
     }
 
     if (disabled) {
       Object.assign(styles.input, {
-        cursor: 'not-allowed',
-        color: 'lightgrey',
-        borderColor: 'lightgrey',
-        backgroundColor: '#efeff1',
+        cursor: "not-allowed",
+        color: "lightgrey",
+        borderColor: "lightgrey",
+        backgroundColor: "#efeff1",
       });
     }
 
+    const first3 = [];
+    const middle3 = [];
+    const last3 = [];
+    for (let i = 0; i < input.length; i++) {
+      const comp = (
+        <input
+          ref={(ref) => {
+            this.textInput[i] = ref;
+          }}
+          id={`${this.uuid}-${i}`}
+          data-id={i}
+          autoFocus={autoFocus && i === 0 ? "autoFocus" : ""}
+          value={input[i]}
+          key={`input_${i}`}
+          type={type}
+          min={0}
+          max={9}
+          maxLength={input.length === i + 1 ? 1 : input.length}
+          style={styles.input}
+          autoComplete={autoComplete}
+          onFocus={(e) => e.target.select(e)}
+          onBlur={(e) => this.handleBlur(e)}
+          onChange={(e) => this.handleChange(e)}
+          onKeyDown={(e) => this.handleKeyDown(e)}
+          disabled={disabled}
+          data-valid={isValid}
+          pattern={pattern}
+          inputMode={inputMode}
+        />
+      );
+
+      if (i < 3) {
+        first3.push(comp);
+      } else if (i < 6) {
+        middle3.push(comp);
+      } else if (i < 9) {
+        last3.push(comp);
+      }
+    }
+
     return (
-      <div className={classNames(className, 'react-code-input')} style={styles.container}>
-        {input.map((value, i) => {
-          return (
-            <input
-              ref={(ref) => {
-                this.textInput[i] = ref;
-              }}
-              id={`${this.uuid}-${i}`}
-              data-id={i}
-              autoFocus={autoFocus && (i === 0) ? 'autoFocus' : ''}
-              value={value}
-              key={`input_${i}`}
-              type={type}
-              min={0}
-              max={9}
-              maxLength={input.length === i + 1 ? 1 : input.length}
-              style={styles.input}
-              autoComplete={autoComplete}
-              onFocus={(e) => e.target.select(e)}
-              onBlur={(e) => this.handleBlur(e)}
-              onChange={(e) => this.handleChange(e)}
-              onKeyDown={(e) => this.handleKeyDown(e)}
-              disabled={disabled}
-              data-valid={isValid}
-              pattern={pattern}
-              inputMode={inputMode}
-            />
-          );
-        })}
+      <div
+        className={classNames(className, "react-code-input")}
+        style={styles.container}
+      >
+        {first3}
+        <div style={styles.separator} />
+        {middle3}
+        <div style={styles.separator} />
+        {last3}
       </div>
     );
   }
 }
 
 ReactCodeInput.defaultProps = {
-  autoComplete: 'off',
+  autoComplete: "off",
   autoFocus: true,
   isValid: true,
   disabled: false,
   forceUppercase: false,
   fields: 4,
-  value: '',
-  type: 'text',
+  value: "",
+  type: "text",
   filterKeyCodes: [189, 190],
-  filterChars: ['-', '.'],
+  filterChars: ["-", "."],
   filterCharsIsWhitelist: false,
 };
 
 ReactCodeInput.propTypes = {
-  type: PropTypes.oneOf(['text', 'number', 'password', 'tel']),
+  type: PropTypes.oneOf(["text", "number", "password", "tel"]),
   fields: PropTypes.number,
   value: PropTypes.string,
   onChange: PropTypes.func,
@@ -343,9 +381,18 @@ ReactCodeInput.propTypes = {
   filterCharsIsWhitelist: PropTypes.bool,
   pattern: PropTypes.string,
   inputMode: PropTypes.oneOf([
-    'verbatim', 'latin', 'latin-name', 'latin-prose',
-    'full-width-latin', 'kana', 'kana-name', 'katakana',
-    'numeric', 'tel', 'email', 'url',
+    "verbatim",
+    "latin",
+    "latin-name",
+    "latin-prose",
+    "full-width-latin",
+    "kana",
+    "kana-name",
+    "katakana",
+    "numeric",
+    "tel",
+    "email",
+    "url",
   ]),
 };
 
